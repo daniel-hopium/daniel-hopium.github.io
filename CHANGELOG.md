@@ -21,5 +21,7 @@ Kategorien: **Neu** (neue Funktionen), **Verbessert** (bestehendes Verhalten), *
 - Hell/Dunkel-Umschalter und Deutsch/Englisch wie in den Apps.
 
 ### Behoben
+- Die Karte „Daumenregel“ heißt jetzt „UI-Atlas“ und führt auf die neue Adresse /ui-atlas/;
+  die alte Adresse /pattern-library/ gibt es nicht mehr.
 - Die Karte „Schiri-Trainer Volleyball“ führt zum umbenannten Repo
   `volley-referee-trainer` statt auf eine 404-Seite.
