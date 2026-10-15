@@ -19,3 +19,7 @@ Kategorien: **Neu** (neue Funktionen), **Verbessert** (bestehendes Verhalten), *
 - Hintergrund aus den Markenfarben der Apps, Spotlight und leichte Neigung beim Überfahren
   der Karten; bei „Bewegung reduzieren“ steht alles still.
 - Hell/Dunkel-Umschalter und Deutsch/Englisch wie in den Apps.
+
+### Behoben
+- Die Karte „Schiri-Trainer Volleyball“ führt zum umbenannten Repo
+  `volley-referee-trainer` statt auf eine 404-Seite.

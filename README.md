@@ -9,7 +9,7 @@ Die Startseite unter https://daniel-hopium.github.io/ führt zu allen Lern-Apps:
 | [HTML-Atlas](https://daniel-hopium.github.io/html-atlas/) | HTML-Elemente und Attribute, 110 Einträge |
 | [CSS-Atlas](https://daniel-hopium.github.io/css-atlas/) | CSS-Eigenschaften und Selektoren, 105 Einträge |
 | [Daumenregel](https://daniel-hopium.github.io/pattern-library/) | UI-Regeln, 29 Lektionen |
-| [Schiri-Trainer Volleyball](https://daniel-hopium.github.io/volleyball-referee-trainer/) | Schiedsrichterprüfung, 130 Fragen |
+| [Schiri-Trainer Volleyball](https://daniel-hopium.github.io/volley-referee-trainer/) | Schiedsrichterprüfung, 130 Fragen |
 
 ## Starten
 
