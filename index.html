@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
+<script>try{const t=JSON.parse(localStorage.getItem('portal:theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<title>Zum Anfassen – interaktive Lern-Apps</title>
+<meta name="description" content="Sechs interaktive Lern-Apps an einem Ort: Angular, ARIA, HTML, CSS, UI-Regeln und Volleyball-Schiedsrichter. Kein Login, kein Build – öffnen und ausprobieren.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Figtree:wght@600;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{
+  --bg:#F3F5F7; --surface:#FFFFFF; --surface-2:#EBEFF3; --ink:#15191F; --muted:#545C6A;
+  --line:#D8DDE4; --line-strong:#838C9B;
+  --glass:rgb(255 255 255 / .72);
+  --shadow:0 1px 2px rgb(16 24 40 / .06), 0 10px 28px rgb(16 24 40 / .10);
+  --shadow-hi:0 2px 4px rgb(16 24 40 / .08), 0 22px 48px rgb(16 24 40 / .18);
+  --brand:#1F5FAD; --brand-ink:#FFFFFF; --brand-soft:#E6EEF8;
+  --aurora-op:.38;
+  --radius-ctl:10px; --radius-lg:18px;
+  --font-display:"Figtree", "Atkinson Hyperlegible", system-ui, sans-serif;
+  --font-body:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:"JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0B0E12; --surface:#141820; --surface-2:#1C222B; --ink:#E7EAEE; --muted:#A0A8B4;
+    --line:#262C35; --line-strong:#6B7483;
+    --glass:rgb(14 17 21 / .66);
+    --shadow:0 1px 2px rgb(0 0 0 / .4), 0 10px 28px rgb(0 0 0 / .45);
+    --shadow-hi:0 2px 4px rgb(0 0 0 / .5), 0 24px 56px rgb(0 0 0 / .6);
+    --brand:#86B6F2; --brand-ink:#0A1A2F; --brand-soft:#16263A;
+    --aurora-op:.30;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0B0E12; --surface:#141820; --surface-2:#1C222B; --ink:#E7EAEE; --muted:#A0A8B4;
+  --line:#262C35; --line-strong:#6B7483;
+  --glass:rgb(14 17 21 / .66);
+  --shadow:0 1px 2px rgb(0 0 0 / .4), 0 10px 28px rgb(0 0 0 / .45);
+  --shadow-hi:0 2px 4px rgb(0 0 0 / .5), 0 24px 56px rgb(0 0 0 / .6);
+  --brand:#86B6F2; --brand-ink:#0A1A2F; --brand-soft:#16263A;
+  --aurora-op:.30;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:1rem;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--brand)}
+:focus-visible{outline:3px solid var(--brand);outline-offset:3px}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+kbd{font-family:var(--font-mono);font-size:.75rem;border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:0 .45em;background:var(--surface);color:var(--muted);white-space:nowrap}
+
+.skip{position:absolute;left:12px;top:-100px;z-index:100;background:var(--brand);color:var(--brand-ink);padding:10px 16px;border-radius:var(--radius-ctl);font-weight:700;text-decoration:none}
+.skip:focus{top:calc(8px + env(safe-area-inset-top,0px))}
+
+/* ---------- Aurora: je App ein Farbfleck, langsam treibend ---------- */
+.aurora{position:fixed;inset:-20vmax;z-index:-1;pointer-events:none;opacity:var(--aurora-op);filter:blur(70px) saturate(1.2)}
+.aurora span{position:absolute;width:46vmax;height:46vmax;border-radius:50%;background:var(--c);mix-blend-mode:normal;animation:drift var(--t) ease-in-out infinite alternate}
+.aurora span:nth-child(1){left:8%;top:6%;--t:26s}
+.aurora span:nth-child(2){left:52%;top:0%;--t:31s;animation-delay:-8s}
+.aurora span:nth-child(3){left:66%;top:42%;--t:24s;animation-delay:-4s}
+.aurora span:nth-child(4){left:18%;top:48%;--t:34s;animation-delay:-12s}
+.aurora span:nth-child(5){left:40%;top:26%;--t:29s;animation-delay:-16s;width:34vmax;height:34vmax}
+.aurora span:nth-child(6){left:-4%;top:74%;--t:37s;animation-delay:-20s;width:38vmax;height:38vmax}
+@keyframes drift{
+  0%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(6vmax,-4vmax) scale(1.12)}
+  100%{transform:translate(-5vmax,5vmax) scale(.92)}
+}
+.grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;background-image:radial-gradient(rgb(128 128 128 / .07) 1px,transparent 1px);background-size:3px 3px}
+@media (prefers-reduced-motion: reduce){.aurora span{animation:none}}
+
+/* ---------- Kopfleiste ---------- */
+.appbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:8px 14px;padding:10px max(16px,calc((100vw - 1180px) / 2));background:var(--glass);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);border-bottom:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
+.logo{display:flex;align-items:center;gap:10px;margin-right:auto;min-width:0;color:var(--ink);text-decoration:none;border-radius:var(--radius-ctl);padding:4px 8px 4px 4px;margin-left:-4px}
+.logo img{width:36px;height:36px;border-radius:10px;flex:none}
+.logo-name{font:800 1.125rem/1.15 var(--font-display);letter-spacing:-.01em}
+.logo-sub{display:block;font:400 .75rem/1.3 var(--font-body);color:var(--muted);letter-spacing:.02em}
+.icon-btn{width:44px;height:44px;display:inline-grid;place-items:center;border-radius:var(--radius-ctl);background:transparent;border:0;color:var(--ink);cursor:pointer;flex:none}
+.icon-btn:hover{background:var(--surface-2)}
+.theme-btn .ic-sun,.theme-btn[aria-pressed="true"] .ic-moon{display:none}
+.theme-btn[aria-pressed="true"] .ic-sun{display:block}
+.hdr-link{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 10px;border-radius:var(--radius-ctl);font-weight:700;color:var(--ink);text-decoration:none}
+.hdr-link:hover{background:var(--surface-2)}
+@media (max-width:519px){.hdr-long{display:none}}
+
+/* ---------- Hero ---------- */
+main{max-width:1180px;margin:0 auto;padding:0 16px 72px}
+.hero{padding:clamp(48px,9vw,112px) 0 clamp(28px,4vw,44px);text-align:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;margin:0 0 18px;padding:6px 14px;border-radius:999px;background:var(--glass);border:1px solid var(--line);font-size:.875rem;font-weight:700;color:var(--muted);backdrop-filter:blur(8px)}
+.eyebrow .dot{width:8px;height:8px;border-radius:50%;background:#1B9E5A;box-shadow:0 0 0 0 rgb(27 158 90 / .5);animation:pulse 2.4s ease-out infinite}
+@keyframes pulse{to{box-shadow:0 0 0 10px rgb(27 158 90 / 0)}}
+@media (prefers-reduced-motion: reduce){.eyebrow .dot{animation:none}}
+h1{font:800 clamp(2.3rem,6.4vw,4.6rem)/1.02 var(--font-display);letter-spacing:-.035em;margin:0 auto;max-width:15ch;text-wrap:balance}
+.shine{background:linear-gradient(100deg,var(--g1),var(--g2),var(--g3),var(--g4),var(--g1));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 14s linear infinite}
+@keyframes shine{to{background-position:300% 0}}
+@media (prefers-reduced-motion: reduce){.shine{animation:none}}
+.lede{font-size:clamp(1.05rem,1.6vw,1.25rem);color:var(--muted);max-width:56ch;margin:20px auto 0;text-wrap:pretty}
+.stats{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:30px 0 0;padding:0;list-style:none}
+.stats li{display:flex;align-items:baseline;gap:8px;padding:10px 16px;border-radius:14px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(8px)}
+.stats b{font:700 1.25rem/1 var(--font-mono);letter-spacing:-.02em}
+.stats span{font-size:.875rem;color:var(--muted)}
+
+/* ---------- Werkzeugleiste: Suche + Filter ---------- */
+.tools{position:sticky;top:calc(65px + env(safe-area-inset-top,0px));z-index:10;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:8px 0 22px;padding:10px;border-radius:16px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);box-shadow:var(--shadow)}
+.search{position:relative;flex:1 1 260px;min-width:0}
+.search .ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.search input{width:100%;min-height:44px;padding:0 44px 0 42px;border-radius:var(--radius-ctl);border:1.5px solid var(--line-strong);background:var(--surface);color:var(--ink);font:inherit}
+.search input::placeholder{color:var(--muted)}
+.search kbd{position:absolute;right:12px;top:50%;transform:translateY(-50%)}
+.search input:focus + kbd,.search input:not(:placeholder-shown) + kbd{display:none}
+@media (hover:none){.search kbd{display:none}.search input{padding-right:14px}}
+.chips{display:flex;flex-wrap:wrap;gap:6px;border:0;margin:0;padding:0;min-width:0}
+.chips legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.chip span{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);font-weight:700;font-size:.9375rem;color:var(--muted);transition:background-color .15s,color .15s,border-color .15s}
+.chip span i{font-style:normal;font:500 .75rem/1 var(--font-mono);opacity:.75}
+.chip:hover span{border-color:var(--line-strong);color:var(--ink)}
+.chip input:checked + span{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.chip input:focus-visible + span{outline:3px solid var(--brand);outline-offset:2px}
+@media (max-width:719px){.tools{position:static}.chips{flex-wrap:nowrap;overflow-x:auto;margin:0 -10px;padding:2px 10px;scrollbar-width:none}.chip span{white-space:nowrap}}
+
+/* ---------- Karten ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:18px;list-style:none;margin:0;padding:0}
+/* Bento bei drei Spalten: 2+1 · 1+1+1 · 3 – sechs Karten füllen das Raster ohne Lücke */
+@media (min-width:1040px){
+  .grid[data-bento]{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .grid[data-bento] li:first-child{grid-column:span 2}
+  .grid[data-bento] li:last-child{grid-column:1 / -1}
+}
+.card{--c:var(--cl);position:relative;display:flex;flex-direction:column;height:100%;padding:22px;border-radius:var(--radius-lg);background:var(--surface);border:1px solid var(--line);color:var(--ink);text-decoration:none;box-shadow:var(--shadow);overflow:hidden;isolation:isolate;transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(var(--ty,0));transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,border-color .25s}
+:root[data-theme="dark"] .card{--c:var(--cd)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .card{--c:var(--cd)}}
+.card::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(520px circle at var(--mx,50%) var(--my,0%),color-mix(in srgb,var(--c) 22%,transparent),transparent 55%);opacity:0;transition:opacity .3s}
+.card::after{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--c);transform:scaleX(.18);transform-origin:left;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.card:hover,.card:focus-visible{--ty:-4px;border-color:color-mix(in srgb,var(--c) 55%,var(--line));box-shadow:var(--shadow-hi)}
+.card:hover::before,.card:focus-visible::before{opacity:1}
+.card:hover::after,.card:focus-visible::after{transform:scaleX(1)}
+.card:focus-visible{outline-color:var(--c)}
+@media (prefers-reduced-motion: reduce){.card,.card::after{transition:none}.card{transform:none!important}}
+.card-top{display:flex;align-items:flex-start;gap:14px}
+.card-icon{width:56px;height:56px;border-radius:15px;flex:none;box-shadow:0 0 0 1px rgb(255 255 255 / .06),0 8px 22px color-mix(in srgb,var(--c) 35%,transparent);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.card:hover .card-icon{transform:rotate(-6deg) scale(1.06)}
+@media (prefers-reduced-motion: reduce){.card:hover .card-icon{transform:none}}
+.card-name{font:800 1.375rem/1.15 var(--font-display);letter-spacing:-.015em;margin:2px 0 3px}
+.card-tag{font-size:.875rem;color:var(--muted);margin:0}
+.card-key{margin-left:auto}
+@media (hover:none){.card-key{display:none}}
+.card-desc{margin:16px 0 18px;text-wrap:pretty}
+.card-foot{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:auto}
+.badge{display:inline-flex;align-items:baseline;gap:6px;padding:5px 10px;border-radius:8px;background:color-mix(in srgb,var(--c) 13%,var(--surface));font-size:.8125rem;font-weight:700}
+.badge b{font:700 .9375rem/1 var(--font-mono);color:color-mix(in srgb,var(--c) 70%,var(--ink))}
+.badge.ghost{background:var(--surface-2);color:var(--muted)}
+.go{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-weight:700;color:color-mix(in srgb,var(--c) 75%,var(--ink))}
+.go .ic{transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.card:hover .go .ic{transform:translateX(4px)}
+.grid[data-bento] li:first-child .card-desc,.grid[data-bento] li:last-child .card-desc{font-size:1.0625rem;max-width:60ch}
+
+.empty{text-align:center;padding:48px 16px;border:1.5px dashed var(--line-strong);border-radius:var(--radius-lg);color:var(--muted)}
+.empty button{margin-top:12px;min-height:44px;padding:0 18px;border-radius:var(--radius-ctl);border:1.5px solid var(--line-strong);background:var(--surface);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.empty button:hover{background:var(--surface-2)}
+
+footer{max-width:1180px;margin:0 auto;padding:28px 16px 40px;display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between;color:var(--muted);font-size:.9375rem;border-top:1px solid var(--line)}
+footer a{color:inherit;font-weight:700}
+footer p{margin:0}
+</style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true" id="aurora"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<a class="skip" href="#apps" data-en="Skip to the apps">Zu den Apps springen</a>
+<header class="appbar">
+  <a class="logo" href="./">
+    <img src="favicon.svg" alt="" width="36" height="36">
+    <span class="logo-name">Zum Anfassen<span class="logo-sub" data-en="Interactive learning apps">Interaktive Lern-Apps</span></span>
+  </a>
+  <button type="button" class="icon-btn theme-btn" id="theme-btn" aria-pressed="false" aria-label="Dunkles Design" data-en-label="Dark theme"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="ic ic-moon"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="ic ic-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+  <a class="hdr-link" id="lang-link" href="?lang=en" hreflang="en" lang="en">English</a>
+</header>
+
+<main>
+  <section class="hero">
+    <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span id="eyebrow">6 Apps · alle online</span></p>
+    <h1><span data-en="Learn it by">Lernen, indem man’s</span> <span class="shine" data-en="touching it.">anfasst.</span></h1>
+    <p class="lede" data-en="Interactive web apps for Angular, accessibility, HTML, CSS, UI design and volleyball refereeing. No login, no install – open one and click around.">Interaktive Web-Apps zu Angular, Barrierefreiheit, HTML, CSS, UI-Design und Volleyball-Schiedsrichterei. Kein Login, keine Installation – öffnen und losklicken.</p>
+    <ul class="stats" id="stats"></ul>
+  </section>
+
+  <div class="tools" role="search">
+    <div class="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="ic"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <label for="q" class="sr-only" data-en="Search apps">Apps durchsuchen</label>
+      <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="Wohin? z. B. Signals, Fokus, Grid …" data-en-placeholder="Where to? e.g. signals, focus, grid …" aria-describedby="q-hint">
+      <kbd aria-hidden="true">/</kbd>
+      <span id="q-hint" class="sr-only" data-en="Enter opens the first match.">Enter öffnet den ersten Treffer.</span>
+    </div>
+    <fieldset class="chips" id="chips">
+      <legend data-en="Filter by topic">Nach Thema filtern</legend>
+    </fieldset>
+  </div>
+
+  <h2 class="sr-only" id="apps-h" data-en="Apps">Apps</h2>
+  <ul class="grid" id="apps" aria-labelledby="apps-h" tabindex="-1"></ul>
+  <div class="empty" id="empty" hidden>
+    <p id="empty-msg"></p>
+    <button type="button" id="reset" data-en="Show all apps">Alle Apps zeigen</button>
+  </div>
+  <p class="sr-only" role="status" id="live"></p>
+
+  <noscript>
+    <ul>
+      <li><a href="/angular-patterns/">Angular-Patterns</a></li>
+      <li><a href="/aria-compass/">ARIA-Kompass</a></li>
+      <li><a href="/html-atlas/">HTML-Atlas</a></li>
+      <li><a href="/css-atlas/">CSS-Atlas</a></li>
+      <li><a href="/pattern-library/">Daumenregel</a></li>
+      <li><a href="/volleyball-referee-trainer/">Schiri-Trainer Volleyball</a></li>
+    </ul>
+  </noscript>
+</main>
+
+<footer>
+  <p><span data-en="Built by">Gebaut von</span> <a href="https://github.com/daniel-hopium">daniel-hopium</a> · <span data-en="every app is a single HTML file">jede App ist eine einzige HTML-Datei</span></p>
+  <p><a href="https://github.com/daniel-hopium/daniel-hopium.github.io" data-en="Source on GitHub">Quellcode auf GitHub</a></p>
+</footer>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+const reducedMotion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+const store={
+  get(k,d){try{const v=localStorage.getItem('portal:'+k);return v===null?d:JSON.parse(v)}catch(e){return d}},
+  set(k,v){try{localStorage.setItem('portal:'+k,JSON.stringify(v))}catch(e){}}
+};
+
+/* ---------- Sprache: ?lang=, gespeicherte Wahl, Browsersprache – wie in den Apps ---------- */
+const LANG=(()=>{
+  const q=new URLSearchParams(location.search).get('lang');
+  if(q==='de'||q==='en'){store.set('lang',q);return q}
+  const s=store.get('lang',null);
+  return s==='de'||s==='en'?s:/^de\b/i.test(navigator.language||'')?'de':'en';
+})();
+const tx=(de,en)=>LANG==='en'?en:de;
+document.documentElement.lang=LANG;
+if(LANG==='en'){
+  document.title='Hands-on – interactive learning apps';
+  $$('[data-en],[data-en-label],[data-en-placeholder]').forEach(el=>{
+    if(el.dataset.en)el.textContent=el.dataset.en;
+    if(el.dataset.enLabel)el.setAttribute('aria-label',el.dataset.enLabel);
+    if(el.dataset.enPlaceholder)el.setAttribute('placeholder',el.dataset.enPlaceholder);
+  });
+  $('.logo-name').firstChild.textContent='Hands-on';
+}
+{
+  const other=LANG==='en'?'de':'en',a=$('#lang-link');
+  a.textContent=other==='en'?'English':'Deutsch';a.hreflang=a.lang=other;
+  const u=new URL(location.href);u.searchParams.set('lang',other);a.href=u.pathname+u.search;
+}
+
+/* ---------- Hell/Dunkel-Umschalter: Klick legt das Design fest und merkt es sich, sonst gilt die Systemeinstellung ---------- */
+(()=>{
+  const btn=$('#theme-btn'),mq=matchMedia('(prefers-color-scheme: dark)');
+  const isDark=()=>{const t=document.documentElement.getAttribute('data-theme');return t?t==='dark':mq.matches};
+  const sync=()=>btn.setAttribute('aria-pressed',String(isDark()));
+  btn.addEventListener('click',()=>{const m=isDark()?'light':'dark';document.documentElement.setAttribute('data-theme',m);store.set('theme',m);sync()});
+  mq.addEventListener('change',sync);sync();
+})();
+
+/* ---------- Die Apps ----------
+   cl/cd: Markenfarbe der App in hell/dunkel. icon: Pfad zum Favicon der App (gleicher Ursprung). */
+const VB_ICON='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#0F1418"/><g fill="none" stroke="#C2D6EA" stroke-width="2.2" stroke-linecap="round"><circle cx="16" cy="16" r="9.5"/><path d="M16 6.5c-1.8 4.2-1.2 8.6 2 12.2M7.2 19.4c4.4.4 8.4-1.4 10.8-5M24.6 19.8c-2.6-3.6-6.6-5.4-11.2-4.8" stroke-opacity=".55"/></g><circle cx="23.5" cy="8.5" r="1.7" fill="#E0C48A"/></svg>');
+const APPS=[
+  {id:'angular-patterns',name:'Angular-Patterns',cat:'framework',cl:'#6D28D9',cd:'#C4B5FD',en:true,
+   tag:tx('Modernes Angular zum Anfassen','Modern Angular, hands-on'),
+   desc:tx('Signals, Control Flow, RxJS, Forms, Router, Zustand und Sicherheit – jedes Muster mit „So nicht – so“-Code, Live-Simulation und Link auf die genaue Stelle der Doku.','Signals, control flow, RxJS, forms, router, state and security – every pattern with “not like this – like this” code, a live simulation and a link to the exact spot in the docs.'),
+   n:85,unit:tx('Lektionen','lessons'),keys:'angular signals rxjs forms router control flow di dependency injection zustand state performance sicherheit security effect computed http'},
+  {id:'aria-compass',name:tx('ARIA-Kompass','ARIA Compass'),cat:'web',cl:'#0F766E',cd:'#5EEAD4',en:true,
+   tag:tx('ARIA zum Anfassen','ARIA you can touch'),
+   desc:tx('Rollen, Namen, Zustände, Live-Regionen und Widgets – mit Accessibility-Inspektor, Screenreader-Trainer und Angular-Hinweisen.','Roles, names, states, live regions and widgets – with an accessibility inspector, screen reader trainer and Angular notes.'),
+   n:22,unit:tx('Lektionen','lessons'),keys:'aria wai-aria a11y barrierefreiheit accessibility screenreader rollen roles fokus focus live region widget dialog tabs combobox'},
+  {id:'html-atlas',name:'HTML-Atlas',cat:'web',cl:'#C2410C',cd:'#FDBA74',en:true,
+   tag:tx('HTML zum Anfassen','HTML you can touch'),
+   desc:tx('Elemente und Attribute mit Live-Vorschau: Variante anklicken, Wirkung sehen – und ablesen, was im Accessibility Tree ankommt.','Elements and attributes with a live preview: click a variant, see the effect – and read what arrives in the accessibility tree.'),
+   n:110,unit:tx('Einträge','entries'),keys:'html elemente elements attribute attributes semantik semantics formular form input dialog details picture meta accessibility tree'},
+  {id:'css-atlas',name:'CSS-Atlas',cat:'web',cl:'#1F5FAD',cd:'#86B6F2',en:true,
+   tag:tx('CSS zum Anfassen','CSS you can touch'),
+   desc:tx('Eigenschaften, Funktionen und Selektoren im Stil der Tailwind-Doku: Wert anklicken, Wirkung sehen, CSS und Tailwind-Klasse ablesen.','Properties, functions and selectors in the style of the Tailwind docs: click a value, see the effect, read the CSS and the Tailwind class.'),
+   n:105,unit:tx('Einträge','entries'),keys:'css tailwind flexbox grid layout selektoren selectors farben colors clamp container queries custom properties variablen cascade layer animation'},
+  {id:'pattern-library',name:'Daumenregel',cat:'design',cl:'#8A6416',cd:'#E0C48A',en:true,
+   tag:tx('UI-Regeln zum Anfassen','UI rules you can touch'),
+   desc:tx('UI-Best-Practices, die nicht beschrieben, sondern vorgeführt werden. Die App hält sich selbst an jede Regel, die sie erklärt.','UI best practices that are demonstrated, not described. The app follows every rule it explains.'),
+   n:29,unit:tx('Lektionen','lessons'),keys:'ui ux design pattern library daumenregel wcag kontrast contrast buttons formulare forms tokens theme marke brand dark patterns'},
+  {id:'volleyball-referee-trainer',name:tx('Schiri-Trainer Volleyball','Volleyball Referee Trainer'),cat:'sport',cl:'#B94E14',cd:'#F08A45',en:false,icon:VB_ICON,
+   tag:tx('Für die Schiedsrichterprüfung','For the referee exam'),
+   desc:tx('Regeln nach FIVB 2025–2028, alle Handzeichen, Wechsel-Simulator und Spielberichtsbogen – dazu Quiz und Probeprüfung.','Rules per FIVB 2025–2028, every hand signal, a substitution simulator and the score sheet – plus a quiz and mock exam.'),
+   n:130,unit:tx('Prüfungsfragen','exam questions'),keys:'volleyball schiedsrichter referee schiri regeln rules fivb handzeichen signals quiz prüfung exam spielberichtsbogen scoresheet'}
+];
+const CATS=[['all',tx('Alle','All')],['web',tx('Web-Grundlagen','Web basics')],['framework','Angular'],['design',tx('UI-Design','UI design')],['sport','Sport']];
+const href=a=>`/${a.id}/${a.en&&LANG==='en'?'?lang=en':''}`;
+
+/* Aurora und Verlaufsschrift aus den Markenfarben */
+$('#aurora').innerHTML=APPS.map(a=>`<span style="--c:${a.cl}"></span>`).join('');
+const h=document.documentElement.style;['#6D28D9','#0F766E','#C2410C','#1F5FAD'].forEach((c,i)=>h.setProperty('--g'+(i+1),c));
+const shineDark=()=>{const d=$('#theme-btn').getAttribute('aria-pressed')==='true';['#C4B5FD','#5EEAD4','#FDBA74','#86B6F2'].forEach((c,i)=>h.setProperty('--g'+(i+1),d?c:['#6D28D9','#0F766E','#C2410C','#1F5FAD'][i]))};
+new MutationObserver(shineDark).observe($('#theme-btn'),{attributes:true,attributeFilter:['aria-pressed']});shineDark();
+
+/* Kennzahlen */
+const total=APPS.filter(a=>a.cat!=='sport').reduce((s,a)=>s+a.n,0);
+$('#eyebrow').textContent=tx(`${APPS.length} Apps · alle online`,`${APPS.length} apps · all live`);
+$('#stats').innerHTML=[[APPS.length,'Apps'],[total,tx('Lektionen & Einträge','lessons & entries')],[130,tx('Prüfungsfragen','exam questions')],[0,tx('Logins nötig','logins needed')]]
+  .map(([n,l])=>`<li><b>${n}</b><span>${l}</span></li>`).join('');
+
+/* Filter-Chips */
+$('#chips').insertAdjacentHTML('beforeend',CATS.map(([v,l],i)=>{
+  const c=v==='all'?APPS.length:APPS.filter(a=>a.cat===v).length;
+  return`<label class="chip"><input type="radio" name="cat" value="${v}"${i?'':' checked'}><span>${esc(l)} <i>${c}</i></span></label>`}).join(''));
+
+/* Karten */
+$('#apps').innerHTML=APPS.map((a,i)=>`<li data-id="${a.id}">
+  <a class="card" href="${href(a)}" style="--cl:${a.cl};--cd:${a.cd}">
+    <div class="card-top">
+      <img class="card-icon" src="${a.icon||`/${a.id}/favicon.svg`}" alt="" width="56" height="56">
+      <div><h3 class="card-name">${esc(a.name)}</h3><p class="card-tag">${esc(a.tag)}</p></div>
+      <kbd class="card-key" aria-hidden="true">${i+1}</kbd>
+    </div>
+    <p class="card-desc">${esc(a.desc)}</p>
+    <div class="card-foot">
+      <span class="badge"><b>${a.n}</b> ${esc(a.unit)}</span>
+      <span class="badge ghost">${a.en?'DE · EN':tx('nur Deutsch','German only')}</span>
+      <span class="go">${tx('Öffnen','Open')}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="ic"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </div>
+  </a></li>`).join('');
+
+/* ---------- Filtern: Thema und Suche wirken zusammen ---------- */
+const grid=$('#apps'),q=$('#q');
+let cat='all';
+function apply(){
+  const t=norm(q.value.trim()),words=t.split(/\s+/).filter(Boolean);
+  let shown=0;
+  APPS.forEach(a=>{
+    const hay=norm([a.name,a.tag,a.desc,a.keys,a.id].join(' '));
+    const ok=(cat==='all'||a.cat===cat)&&words.every(w=>hay.includes(w));
+    $(`li[data-id="${a.id}"]`,grid).hidden=!ok;if(ok)shown++;
+  });
+  grid.toggleAttribute('data-bento',cat==='all'&&!words.length);
+  $('#empty').hidden=shown>0;
+  if(!shown)$('#empty-msg').textContent=tx(`Keine App passt zu „${q.value.trim()}“.`,`No app matches “${q.value.trim()}”.`);
+  $('#live').textContent=shown===APPS.length?'':tx(`${shown} von ${APPS.length} Apps`,`${shown} of ${APPS.length} apps`);
+}
+$$('input[name="cat"]').forEach(r=>r.addEventListener('change',()=>{cat=r.value;apply()}));
+q.addEventListener('input',apply);
+q.addEventListener('keydown',e=>{
+  const first=$$('li:not([hidden]) .card',grid)[0];
+  if(e.key==='Enter'&&first){e.preventDefault();location.href=first.href}
+  else if(e.key==='ArrowDown'&&first){e.preventDefault();first.focus()}
+  else if(e.key==='Escape'&&q.value){q.value='';apply()}
+});
+$('#reset').addEventListener('click',()=>{q.value='';cat='all';$('input[name="cat"][value="all"]').checked=true;apply();q.focus()});
+apply();
+
+/* Tastatur: / fokussiert die Suche, 1–6 öffnet die App, Pfeile wandern durch die Karten */
+document.addEventListener('keydown',e=>{
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  const typing=/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
+  if(e.key==='/'&&!typing){e.preventDefault();q.focus();q.select();return}
+  if(!typing&&/^[1-9]$/.test(e.key)){const a=APPS[+e.key-1];if(a)location.href=href(a);return}
+  if(document.activeElement.classList.contains('card')&&/^Arrow(Right|Left|Down|Up)$/.test(e.key)){
+    const cards=$$('li:not([hidden]) .card',grid),i=cards.indexOf(document.activeElement);
+    const cols=getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+    const step={ArrowRight:1,ArrowLeft:-1,ArrowDown:cols,ArrowUp:-cols}[e.key];
+    const next=cards[Math.max(0,Math.min(cards.length-1,i+step))];
+    if(e.key==='ArrowUp'&&i-cols<0){e.preventDefault();q.focus();return}
+    if(next){e.preventDefault();next.focus()}
+  }
+});
+
+/* Spotlight und leichte Neigung folgen dem Zeiger */
+grid.addEventListener('pointermove',e=>{
+  const c=e.target.closest('.card');if(!c||e.pointerType!=='mouse')return;
+  const r=c.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
+  c.style.setProperty('--mx',x+'px');c.style.setProperty('--my',y+'px');
+  if(!reducedMotion()){c.style.setProperty('--ry',((x/r.width-.5)*5).toFixed(2)+'deg');c.style.setProperty('--rx',((.5-y/r.height)*5).toFixed(2)+'deg')}
+});
+grid.addEventListener('pointerout',e=>{
+  const c=e.target.closest('.card');if(c&&!c.contains(e.relatedTarget)){c.style.removeProperty('--rx');c.style.removeProperty('--ry')}
+});
+</script>
+</body>
+</html>
